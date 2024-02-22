@@ -1,0 +1,325 @@
+---
+title: "AISUSTEIN Project Code"
+author: Vera Bueler-Faudree and Alan R. Vazquez
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    df_print: paged
+  word_document: default
+  pdf_document: default
+---
+
+# **Packages**
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(warning = FALSE)
+library(mlr3verse)
+library(mlr3)
+library(mlr3viz) 
+library(mlr3learners) 
+library(mlr3tuning) 
+library(readxl) 
+library(precrec)
+library(apcluster)
+library(ranger)
+library(randomForest)
+library(performanceEstimation)
+library(caTools)
+library(bbotk)
+library(data.table)
+library(DiceKriging)
+library(mlr3mbo)
+library(nloptr)
+library(patchwork)
+library(pROC)
+```
+
+Define overall parameters
+
+For tomorrow, try number of evaluations equal to 10, 30, and 50.
+
+```{r}
+max_search_time <- 500
+```
+
+# Data Processing
+
+Read in original hand pump data set. Removed NA values in the response variables, and unnecessary or redundant predictor variables.
+
+```{r}
+handpump <- read.csv("handpump_data.csv", header = TRUE)
+handpump_narm <- na.omit(handpump) # Remove rows with missing values.
+```
+
+```{r}
+# Remove irrelevant predictors.
+preprocessed_hp <- subset(handpump_narm, 
+                          select = -c(site_barcode, local_date, pf_overall_stl_seasonal_percent_log, nevents_overall_stl_seasonal_percent_log, nevents_wd_simple_percent_log, nevents_wd_cluster_percent_log, nevents_overall_cluster_percent_log, naive_failure,pred_currently_failed_glm, pred_fail_next_week_glm, pred_currently_failed_SL, pred_fail_next_week_SL, 
+                                      currently_failed))
+head(preprocessed_hp)
+
+print(colnames(preprocessed_hp))
+```
+
+Ensured Response Variables are categorical (factor)
+
+This means the values of the response variables are represented by 1s and 0s, where 1 represents a failure.
+
+```{r}
+#preprocessed_hp$currently_failed <- factor(preprocessed_hp$currently_failed + 0)
+preprocessed_hp$fail_next_week <- factor(preprocessed_hp$fail_next_week + 0)
+```
+
+# Define Classification Task
+
+As seen below, the task focused on predicting "fail_next_week". 
+
+```{r}
+hp_task = as_task_classif(preprocessed_hp, target = "fail_next_week", positive = "1")
+hp_task$positive # Show positive class.
+```
+
+# Split Data
+
+Create data partition. 70% for training and the rest for testing.
+```{r}
+set.seed(4285452) # Add seed for reproducibility.
+splits = partition(hp_task, ratio = 0.7)
+sample <- sample.split(preprocessed_hp, SplitRatio = 0.7)
+train  <- subset(preprocessed_hp, sample == TRUE)
+test   <- subset(preprocessed_hp, sample == FALSE)
+```
+
+
+## Created Balanced Data using SMOTE
+
+Source for how to do SMOTE came from: https://youtu.be/1Mt7EuVJf1A and https://www.rdocumentation.org/packages/DMwR/versions/0.4.1/topics/SMOTE
+
+```{r}
+# Added Row IDs
+tibble::rowid_to_column(train, "ID")
+tibble::rowid_to_column(test, "ID")
+
+# Verifying the samples seem similar to each other:
+prop.table(table(train$fail_next_week))
+prop.table(table(test$fail_next_week))
+
+train$fail_next_week <- as.factor(train$fail_next_week) # make target variable a factor
+table(train$fail_next_week)
+
+# originally 0 had 3762 obs. while 1 had 253.
+# We use the default values of the function.
+set.seed(4285452) # Add seed for reproducibility.
+train <- smote(fail_next_week ~ ., train, perc.over = 1, perc.under = 2, k = 5)
+table(train$fail_next_week)
+```
+
+Define new task with smote data set.
+
+```{r}
+smote_hp_task = as_task_classif(train, target = "fail_next_week", positive = "1")
+smote_hp_task$positive # Show positive class
+```
+
+# Build a standard random forest
+
+```{r}
+basic_learner_classif = lrn("classif.ranger", predict_type = "prob")
+default.parameters <- list()
+default.parameters$num.threads <- 1
+default.parameters$num.trees <- 500
+default.parameters$mtry <- 2
+default.parameters$min.node.size <- 1
+default.parameters$replace <- FALSE
+default.parameters$splitrule <- "gini"
+default.parameters$sample.fraction <- 1
+
+basic_learner_classif$param_set$values = default.parameters
+print(basic_learner_classif$param_set$values) # Print default parameters
+```
+
+Performance of standard random forest with default tuning hyperparameters. 
+```{r}
+# Define type of resampling technique
+cvFive = rsmp("cv", folds = 5)
+# Initiate resampling technique
+cvFive$instantiate(smote_hp_task)
+# Train model
+rr = resample(smote_hp_task, basic_learner_classif, cvFive)
+# Print compiled score. Overall, cross-validation estimate.
+rr$aggregate(msr("classif.recall"))
+```
+
+# Hyperparameter tuning
+
+Define Learner with the hyperparameters that will be tuned. 
+```{r}
+learner_classif = lrn("classif.ranger", predict_type = "prob",
+  mtry = to_tune(1, 5),
+  min.node.size = to_tune(1, 500),
+  replace = to_tune(),
+  splitrule = to_tune(c("gini", "extratrees")),
+  sample.fraction = to_tune(0.1, 1),
+  num.trees = 500) 
+```
+
+Next, we use different tuning strategies.
+
+## Random search
+
+```{r}
+set.seed(4285452) # Add seed for reproducibility.
+RS_instance = tune(
+  tuner = tnr("random_search"),
+  task = smote_hp_task,
+  learner = learner_classif,
+  resampling = rsmp("cv", folds = 5),
+  measure = msr("classif.recall"),
+  terminator = trm("run_time", secs = max_search_time)
+)
+RS_instance$result$learner_param_vals
+```
+
+## Grid search
+
+```{r}
+GS_instance = tune(tuner = tnr("grid_search", resolution = 5), 
+                   task = smote_hp_task, learner = learner_classif, 
+                   resampling = rsmp("cv", folds = 5), 
+                   measures = msr("classif.recall"), 
+                   terminator = trm("run_time", secs = max_search_time))
+GS_instance$result$learner_param_vals
+```
+
+## Bayesian Optimization
+
+Loop Function
+```{r}
+bayesopt_ego = mlr_loop_functions$get("bayesopt_ego")
+surrogate = srlrn(lrn("regr.km", covtype = "matern5_2",
+  optim.method = "BFGS", control = list(trace = FALSE)))
+acq_function = acqf("ei")
+acq_optimizer = acqo(opt("nloptr", algorithm = "NLOPT_GN_ORIG_DIRECT"),
+  terminator = trm("stagnation", iters = 100, threshold = 1e-5))
+```
+
+Define **Tuner**
+
+```{r}
+tuner = tnr("mbo",
+  loop_function = bayesopt_ego,
+  surrogate = surrogate,
+  acq_function = acq_function,
+  acq_optimizer = acq_optimizer)
+```
+
+Start the HPO process.
+
+```{r}
+set.seed(4285452) # Add seed for reproducibility.
+BO_instance = tune(tuner, smote_hp_task, learner_classif, rsmp("cv", folds = 5),
+  msr("classif.recall"), terminator = trm("run_time", secs = max_search_time))
+BO_instance$result$learner_param_vals
+```
+
+## New Tuned Learner
+
+```{r}
+RS_learner_classif = lrn("classif.ranger", predict_type = "prob")
+GS_learner_classif = lrn("classif.ranger", predict_type = "prob")
+BO_learner_classif = lrn("classif.ranger", predict_type = "prob")
+
+RS_learner_classif$param_set$values = RS_instance$result$learner_param_vals[[1]]
+GS_learner_classif$param_set$values = GS_instance$result$learner_param_vals[[1]]
+BO_learner_classif$param_set$values = BO_instance$result$learner_param_vals[[1]]
+```
+
+# Comparisons
+
+## Using cross-validation estimates
+
+We specify that we wish to evaluate the predictive performance of the model using K-fold cross-validation. In this case, we use 5-fold cross-validation, a common choice.
+
+```{r}
+# Define type of resampling technique
+cvFive = rsmp("cv", folds = 5)
+# Initiate resampling technique
+cvFive$instantiate(smote_hp_task)
+
+# Train models and evaluate using cross validation
+RS_rr = resample(smote_hp_task, RS_learner_classif, cvFive)
+GS_rr = resample(smote_hp_task, GS_learner_classif, cvFive)
+BO_rr = resample(smote_hp_task, BO_learner_classif, cvFive)
+```
+
+Compare HPO methods in terms of 5-fold cross-validation estimates
+
+```{r}
+# Print compiled score. Overall, cross-validation estimate.
+RS_rr$aggregate(msr("classif.recall"))
+GS_rr$aggregate(msr("classif.recall"))
+BO_rr$aggregate(msr("classif.recall"))
+rr$aggregate(msr("classif.recall")) # Default random forest.
+```
+
+For predictions for probability: "classif.mbrier", squared difference between predicted probabilities and the truth) and logloss ("classif.logloss", negative logarithm of the predicted probability for the true class.
+
+## Using test set estimates
+
+Train standard random forest.
+```{r}
+# Train using rows in the training data set.
+RS_learner_classif$train(smote_hp_task)
+GS_learner_classif$train(smote_hp_task)
+BO_learner_classif$train(smote_hp_task)
+basic_learner_classif$train(smote_hp_task)
+
+# Predict on the test data set
+RS_new_prediction = RS_learner_classif$predict_newdata(test)
+GS_new_prediction = GS_learner_classif$predict_newdata(test)
+BO_new_prediction = BO_learner_classif$predict_newdata(test)
+Basic_new_prediction = basic_learner_classif$predict_newdata(test)
+```
+
+```{r}
+measure = msrs(c( "classif.precision", "classif.recall", "classif.auc", "classif.specificity"))
+cat("Random search \n")
+RS_new_prediction$score(measure)
+cat("Grid search \n")
+GS_new_prediction$score(measure)
+cat("Bayesian Optimization \n")
+BO_new_prediction$score(measure)
+cat("Default Random Forest \n")
+Basic_new_prediction$score(measure)
+```
+
+```{r}
+#library(pROC)
+RS_ROC <- pROC::roc(response = RS_new_prediction$truth, 
+                predictor = RS_new_prediction$prob[,1], 
+                ## This function assumes that the second class is 
+                ## the event of interest.
+                levels = c("0", "1"))
+GS_ROC <- pROC::roc(response = GS_new_prediction$truth, 
+                predictor = GS_new_prediction$prob[,1], 
+                ## This function assumes that the second class is 
+                ## the event of interest.
+                levels = c("0", "1"))
+BO_ROC <- pROC::roc(response = BO_new_prediction$truth, 
+                predictor = BO_new_prediction$prob[,1], 
+                ## This function assumes that the second class is 
+                ## the event of interest.
+                levels = c("0", "1"))
+Basic_ROC <- pROC::roc(response = Basic_new_prediction$truth, 
+                predictor = Basic_new_prediction$prob[,1], 
+                ## This function assumes that the second class is 
+                ## the event of interest.
+                levels = c("0", "1"))
+```
+
+```{r}
+plot(Basic_ROC, cex.axis = 1.0, cex.lab = 1.3, cex.main = 1.2)
+lines(RS_ROC, col = "blue")
+lines(GS_ROC, col = "red")
+lines(BO_ROC, col = "green")
+grid(nx = NULL, ny = NULL)
+```
