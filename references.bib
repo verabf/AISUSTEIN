@@ -1,0 +1,173 @@
+%% This BibTeX bibliography file was created using BibDesk.
+%% https://bibdesk.sourceforge.io/
+
+%% Created for Alan Vazquez at 2023-07-23 17:30:36 -0500 
+
+
+%% Saved with string encoding Unicode (UTF-8) 
+
+
+
+@inbook{Feurer2019,
+	abstract = {Recent interest in complex and computationally expensive machine learning models with many hyperparameters, such as automated machine learning (AutoML) frameworks and deep neural networks, has resulted in a resurgence of research on hyperparameter optimization (HPO). In this chapter, we give an overview of the most prominent approaches for HPO. We first discuss blackbox function optimization methods based on model-free methods and Bayesian optimization. Since the high computational demand of many modern machine learning applications renders pure blackbox optimization extremely costly, we next focus on modern multi-fidelity methods that use (much) cheaper variants of the blackbox function to approximately assess the quality of hyperparameter settings. Lastly, we point to open problems and future research directions.},
+	address = {Cham},
+	author = {Feurer, Matthias and Hutter, Frank},
+	booktitle = {Automated Machine Learning: Methods, Systems, Challenges},
+	date-added = {2023-07-23 17:30:20 -0500},
+	date-modified = {2023-07-23 17:30:20 -0500},
+	doi = {10.1007/978-3-030-05318-5_1},
+	editor = {Hutter, Frank and Kotthoff, Lars and Vanschoren, Joaquin},
+	isbn = {978-3-030-05318-5},
+	pages = {3--33},
+	publisher = {Springer International Publishing},
+	title = {Hyperparameter Optimization},
+	url = {https://doi.org/10.1007/978-3-030-05318-5_1},
+	year = {2019},
+	bdsk-url-1 = {https://doi.org/10.1007/978-3-030-05318-5_1}}
+
+@book{Jamesetal2013,
+	author = {James, Gareth and Witten, Daniela and Hastie, Trevor and Tibshirani, Robert},
+	date-added = {2023-07-23 17:18:32 -0500},
+	date-modified = {2023-07-23 17:19:40 -0500},
+	publisher = {Springer},
+	title = {An Introduction to Statistical Learning: with Applications in R },
+	year = {2013}}
+
+@article{Wilson2017,
+	abstract = {Broken water pumps continue to impede efforts to deliver clean and economically-viable water to the global poor. The literature has demonstrated that customers' health benefits and willingness to pay for clean water are best realized when clean water infrastructure performs extremely well (>99% uptime). In this paper, we used sensor data from 42 Afridev-brand handpumps observed for 14 months in western Kenya to demonstrate how sensors and supervised ensemble machine learning could be used to increase total fleet uptime from a best-practices baseline of about 70% to >99%. We accomplish this increase in uptime by forecasting pump failures and identifying existing failures very quickly. Comparing the costs of operating the pump per functional year over a lifetime of 10 years, we estimate that implementing this algorithm would save 7% on the levelized cost of water relative to a sensor-less scheduled maintenance program. Combined with a rigorous system for dispatching maintenance personnel, implementing this algorithm in a real-world program could significantly improve health outcomes and customers' willingness to pay for water services.},
+	author = {Wilson, Daniel L. AND Coyle, Jeremy R. AND Thomas, Evan A.},
+	date-added = {2023-07-20 12:04:12 -0500},
+	date-modified = {2023-07-20 12:04:21 -0500},
+	doi = {10.1371/journal.pone.0188808},
+	journal = {PLOS ONE},
+	month = {11},
+	number = {11},
+	pages = {1-13},
+	publisher = {Public Library of Science},
+	title = {Ensemble machine learning and forecasting can achieve 99% uptime for rural handpumps},
+	url = {https://doi.org/10.1371/journal.pone.0188808},
+	volume = {12},
+	year = {2017},
+	bdsk-url-1 = {https://doi.org/10.1371/journal.pone.0188808}}
+
+@article{Probst2018,
+	abstract = {The number of trees T in the random forest (RF) algorithm for supervised learning has to be set by the user. It is unclear whether T should simply be set to the largest computa-tionally manageable value or whether a smaller T may be sufficient or in some cases even better. While the principle underlying bagging is that more trees are better, in practice the classification error rate sometimes reaches a minimum before increasing again for increasing number of trees. The goal of this paper is four-fold: (i) providing theoretical results showing that the expected error rate may be a non-monotonous function of the number of trees and explaining under which circumstances this happens; (ii) providing theoretical results showing that such non-monotonous patterns cannot be observed for other performance measures such as the Brier score and the logarithmic loss (for classification) and the mean squared error (for regression); (iii) illustrating the extent of the problem through an application to a large number (n = 306) of datasets from the public database OpenML; (iv) finally arguing in favor of setting T to a computationally feasible large number as long as classical error measures based on average loss are considered.},
+	author = {Philipp Probst and Anne-Laure Boulesteix},
+	date-modified = {2023-07-20 11:59:34 -0500},
+	journal = {Journal of Machine Learning Research},
+	keywords = {Random forest,bagging,error rate,number of trees,out-of-bag},
+	pages = {1-18},
+	title = {To Tune or Not to Tune the Number of Trees in Random Forest},
+	url = {http://jmlr.org/papers/v18/17-269.html.},
+	volume = {18},
+	year = {2018},
+	bdsk-url-1 = {http://jmlr.org/papers/v18/17-269.html.}}
+
+@article{Probst2019a,
+	abstract = {The random forest (RF) algorithm has several hyperparameters that have to be set by the user, for example, the number of observations drawn randomly for each tree and whether they are drawn with or without replacement, the number of variables drawn randomly for each split, the splitting rule, the minimum number of samples that a node must contain, and the number of trees. In this paper, we first provide a literature review on the parameters' influence on the prediction performance and on variable importance measures. It is well known that in most cases RF works reasonably well with the default values of the hyperparameters specified in software packages. Nevertheless, tuning the hyperparameters can improve the performance of RF. In the second part of this paper, after a presenting brief overview of tuning strategies, we demonstrate the application of one of the most established tuning strategies, model-based optimization (MBO). To make it easier to use, we provide the tuneRanger R package that tunes RF with MBO automatically. In a benchmark study on several datasets, we compare the prediction performance and runtime of tuneRanger with other tuning implementations in R and RF with default hyperparameters. This article is categorized under: Algorithmic Development > Biological Data Mining Algorithmic Development > Statistics Algorithmic Development > Hierarchies and Trees Technologies > Machine Learning.},
+	author = {Philipp Probst and Marvin N. Wright and Anne-Laure Boulesteix},
+	date-modified = {2023-07-20 12:03:17 -0500},
+	doi = {10.1002/widm.1301},
+	issn = {19424795},
+	issue = {3},
+	journal = {WIREs Data Mining and Knowledge Discovery},
+	keywords = {ensemble,literature review,out-of-bag,performance evaluation,ranger,sequential model-based optimization,tuning parameter},
+	pages = {e1301},
+	publisher = {Wiley-Blackwell},
+	title = {Hyperparameters and tuning strategies for random forest},
+	volume = {9},
+	year = {2019},
+	bdsk-url-1 = {https://doi.org/10.1002/widm.1301}}
+
+@report{George2020,
+	abstract = {Text classification is a common task in machine learning. One of the supervised classification algorithm called Random Forest has been generally used for this task. There is a group of parameters in Random Forest classifier which need to be tuned. If proper tuning is performed on these hyperparameters, the classifier will give a better result. This paper proposes a hybrid approach of Random Forest classifier and Grid Search method for customer feedback data analysis. The tuning approach of Grid Search is applied for tuning the hyperparameters of Random Forest classifier. The Random Forest classifier is used for customer feedback data analysis and then the result is compared with the results which get after applying Grid Search method. The proposed approach provided a promising result in customer feedback data analysis. The experiments in this work show that the accuracy of the proposed model to predict the sentiment on customer feedback data is greater than the performance accuracy obtained by the model without applying parameter tuning.},
+	author = {Siji George and B Sumathi},
+	issue = {9},
+	journal = {IJACSA) International Journal of Advanced Computer Science and Applications},
+	keywords = {Classification,grid search,hyperparameters,parameter tuning,random forest classifier,sentiment analysis},
+	title = {Grid Search Tuning of Hyperparameters in Random Forest Classifier for Customer Feedback Sentiment Prediction},
+	url = {www.ijacsa.thesai.org},
+	volume = {11},
+	year = {2020},
+	bdsk-url-1 = {www.ijacsa.thesai.org}}
+
+@article{Lebedev2014,
+	abstract = {Computer-aided diagnosis of Alzheimer's disease (AD) is a rapidly developing field of neuroimaging with strong potential to be used in practice. In this context, assessment of models' robustness to noise and imaging protocol differences together with post-processing and tuning strategies are key tasks to be addressed in order to move towards successful clinical applications. In this study, we investigated the efficacy of Random Forest classifiers trained using different structural MRI measures, with and without neuroanatomical constraints in the detection and prediction of AD in terms of accuracy and between-cohort robustness. From The ADNI database, 185 AD, and 225 healthy controls (HC) were randomly split into training and testing datasets. 165 subjects with mild cognitive impairment (MCI) were distributed according to the month of conversion to dementia (4-year follow-up). Structural 1.5-T MRI-scans were processed using Freesurfer segmentation and cortical reconstruction. Using the resulting output, AD/HC classifiers were trained. Training included model tuning and performance assessment using out-of-bag estimation. Subsequently the classifiers were validated on the AD/HC test set and for the ability to predict MCI-to-AD conversion. Models' between-cohort robustness was additionally assessed using the AddNeuroMed dataset acquired with harmonized clinical and imaging protocols. In the ADNI set, the best AD/HC sensitivity/specificity (88.6%/92.0%-test set) was achieved by combining cortical thickness and volumetric measures. The Random Forest model resulted in significantly higher accuracy compared to the reference classifier (linear Support Vector Machine). The models trained using parcelled and high-dimensional (HD) input demonstrated equivalent performance, but the former was more effective in terms of computation/memory and time costs. The sensitivity/specificity for detecting MCI-to-AD conversion (but not AD/HC classification performance) was further improved from 79.5%/75%-83.3%/81.3% by a combination of morphometric measurements with ApoE-genotype and demographics (age, sex, education). When applied to the independent AddNeuroMed cohort, the best ADNI models produced equivalent performance without substantial accuracy drop, suggesting good robustness sufficient for future clinical implementation.},
+	author = {A. V. Lebedev and E. Westman and G. J.P. Van Westen and M. G. Kramberger and A. Lundervold and D. Aarsland and H. Soininen and I. K{\l}oszewska and P. Mecocci and M. Tsolaki and B. Vellas and S. Lovestone and A. Simmons},
+	doi = {10.1016/j.nicl.2014.08.023},
+	issn = {22131582},
+	journal = {NeuroImage: Clinical},
+	keywords = {ADNI,AddNeuroMed,Alzheimer's disease,Computer-aided diagnosis,Mild cognitive impairment,Multi-center study,Random Forest,Structural MRI},
+	pages = {115-125},
+	pmid = {25379423},
+	publisher = {Elsevier Inc.},
+	title = {Random Forest ensembles for detection and prediction of Alzheimer's disease with a good between-cohort robustness},
+	volume = {6},
+	year = {2014},
+	bdsk-url-1 = {https://doi.org/10.1016/j.nicl.2014.08.023}}
+
+@article{Yang2020,
+	abstract = {Hyperparameter optimization (HPO) plays a central role in the automated machine learning (AutoML). It is a challenging task as the response surfaces of hyperparameters are generally unknown, hence essentially a global optimization problem. This paper reformulates HPO as a computer experiment and proposes a novel sequential uniform design (SeqUD) strategy with three-fold advantages: a) the hyperparameter space is adaptively explored with evenly spread design points, without the need of expensive meta-modeling and acquisition optimization; b) the batch-by-batch design points are sequentially generated with parallel processing support; c) a new augmented uniform design algorithm is developed for the efficient real-time generation of follow-up design points. Extensive experiments are conducted on both global optimization tasks and HPO applications. The numerical results show that the proposed SeqUD strategy outperforms benchmark HPO methods, and it can be therefore a promising and competitive alternative to existing AutoML tools.},
+	author = {Zebin Yang and Aijun Zhang},
+	month = {9},
+	title = {Hyperparameter Optimization via Sequential Uniform Designs},
+	url = {http://arxiv.org/abs/2009.03586},
+	year = {2020},
+	bdsk-url-1 = {http://arxiv.org/abs/2009.03586}}
+
+@article{Awad2021,
+	abstract = {Modern machine learning algorithms crucially rely on several design decisions to achieve strong performance, making the problem of Hyperparameter Optimization (HPO) more important than ever. Here, we combine the advantages of the popular bandit-based HPO method Hyperband (HB) and the evolutionary search approach of Differential Evolution (DE) to yield a new HPO method which we call DEHB. Comprehensive results on a very broad range of HPO problems, as well as a wide range of tabular benchmarks from neural architecture search, demonstrate that DEHB achieves strong performance far more robustly than all previous HPO methods we are aware of, especially for high-dimensional problems with discrete input dimensions. For example, DEHB is up to 1000x faster than random search. It is also efficient in computational time, conceptually simple and easy to implement, positioning it well to become a new default HPO method.},
+	author = {Noor Awad and Neeratyoy Mallik and Frank Hutter},
+	month = {5},
+	title = {DEHB: Evolutionary Hyperband for Scalable, Robust and Efficient Hyperparameter Optimization},
+	url = {http://arxiv.org/abs/2105.09821},
+	year = {2021},
+	bdsk-url-1 = {http://arxiv.org/abs/2105.09821}}
+
+@article{Falkner2018,
+	abstract = {Modern deep learning methods are very sensitive to many hyperparameters, and, due to the long training times of state-of-the-art models, vanilla Bayesian hyperparameter optimization is typically computationally infeasible. On the other hand, bandit-based configuration evaluation approaches based on random search lack guidance and do not converge to the best configurations as quickly. Here, we propose to combine the benefits of both Bayesian optimization and bandit-based methods, in order to achieve the best of both worlds: strong anytime performance and fast convergence to optimal configurations. We propose a new practical state-of-the-art hyperparameter optimization method, which consistently outperforms both Bayesian optimization and Hyperband on a wide range of problem types, including high-dimensional toy functions, support vector machines, feed-forward neural networks, Bayesian neural networks, deep reinforcement learning, and convolutional neural networks. Our method is robust and versatile, while at the same time being conceptually simple and easy to implement.},
+	author = {Stefan Falkner and Aaron Klein and Frank Hutter},
+	month = {7},
+	title = {BOHB: Robust and Efficient Hyperparameter Optimization at Scale},
+	url = {http://arxiv.org/abs/1807.01774},
+	year = {2018},
+	bdsk-url-1 = {http://arxiv.org/abs/1807.01774}}
+
+@article{Bischl2023,
+	abstract = {Most machine learning algorithms are configured by a set of hyperparameters whose values must be carefully chosen and which often considerably impact performance. To avoid a time-consuming and irreproducible manual process of trial-and-error to find well-performing hyperparameter configurations, various automatic hyperparameter optimization (HPO) methods---for example, based on resampling error estimation for supervised machine learning---can be employed. After introducing HPO from a general perspective, this paper reviews important HPO methods, from simple techniques such as grid or random search to more advanced methods like evolution strategies, Bayesian optimization, Hyperband, and racing. This work gives practical recommendations regarding important choices to be made when conducting HPO, including the HPO algorithms themselves, performance evaluation, how to combine HPO with machine learning pipelines, runtime improvements, and parallelization. This article is categorized under: Algorithmic Development > Statistics Technologies > Machine Learning Technologies > Prediction.},
+	author = {Bernd Bischl and Martin Binder and Michel Lang and Tobias Pielok and Jakob Richter and Stefan Coors and Janek Thomas and Theresa Ullmann and Marc Becker and Anne-Laure Boulesteix and Difan Deng and Marius Lindauer},
+	date-modified = {2023-07-20 12:02:57 -0500},
+	doi = {10.1002/widm.1484},
+	issn = {19424795},
+	issue = {2},
+	journal = {WIREs Data Mining and Knowledge Discovery},
+	keywords = {automl,hyperparameter optimization,machine learning,model selection,tuning},
+	month = {3},
+	pages = {e1484},
+	publisher = {John Wiley and Sons Inc},
+	title = {Hyperparameter optimization: Foundations, algorithms, best practices, and open challenges},
+	volume = {13},
+	year = {2023},
+	bdsk-url-1 = {https://doi.org/10.1002/widm.1484}}
+
+@article{Lindauer2021,
+	abstract = {Algorithm parameters, in particular hyperparameters of machine learning algorithms, can substantially impact their performance. To support users in determining well-performing hyperparameter configurations for their algorithms, datasets and applications at hand, SMAC3 offers a robust and flexible framework for Bayesian Optimization, which can improve performance within a few evaluations. It offers several facades and pre-sets for typical use cases, such as optimizing hyperparameters, solving low dimensional continuous (artificial) global optimization problems and configuring algorithms to perform well across multiple problem instances. The SMAC3 package is available under a permissive BSD-license at https://github.com/automl/SMAC3.},
+	author = {Marius Lindauer and Katharina Eggensperger and Matthias Feurer and Andr{\'e} Biedenkapp and Difan Deng and Carolin Benjamins and Tim Ruhopf and Ren{\'e} Sass and Frank Hutter},
+	month = {9},
+	title = {SMAC3: A Versatile Bayesian Optimization Package for Hyperparameter Optimization},
+	url = {http://arxiv.org/abs/2109.09831},
+	year = {2021},
+	bdsk-url-1 = {http://arxiv.org/abs/2109.09831}}
+
+@article{Probst2019b,
+	abstract = {Modern supervised machine learning algorithms involve hyperparameters that have to be set before running them. Options for setting hyperparameters are default values from the software package, manual configuration by the user or configuring them for optimal predictive performance by a tuning procedure. The goal of this paper is twofold. Firstly, we formalize the problem of tuning from a statistical point of view, define data-based defaults and suggest general measures quantifying the tunability of hyperparameters of algorithms. Secondly, we conduct a large-scale benchmarking study based on 38 datasets from the OpenML platform and six common machine learning algorithms. We apply our measures to assess the tunability of their parameters. Our results yield default values for hyperparameters and enable users to decide whether it is worth conducting a possibly time consuming tuning strategy, to focus on the most important hyperparameters and to choose adequate hyperparameter spaces for tuning.},
+	author = {Philipp Probst and Anne-Laure Boulesteix and Bernd Bischl},
+	date-modified = {2023-07-20 12:01:48 -0500},
+	journal = {Journal of Machine Learning Research},
+	keywords = {classification,hyperparameters,machine learning,meta-learning,supervised learning,tun-ing},
+	pages = {1-32},
+	title = {Tunability: Importance of Hyperparameters of Machine Learning Algorithms},
+	url = {http://jmlr.org/papers/v20/18-444.html.},
+	volume = {20},
+	year = {2019},
+	bdsk-url-1 = {http://jmlr.org/papers/v20/18-444.html.}}
